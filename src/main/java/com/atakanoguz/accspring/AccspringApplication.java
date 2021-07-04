@@ -5,9 +5,14 @@ import com.atakanoguz.accspring.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
+import java.time.Clock;
 import java.util.HashSet;
+import java.util.UUID;
+import java.util.function.Supplier;
 
 @SpringBootApplication
 public class AccspringApplication implements CommandLineRunner {
@@ -29,4 +34,29 @@ public class AccspringApplication implements CommandLineRunner {
 		System.out.println(customer);
 	}
 
+	@ConditionalOnProperty(
+			prefix = "command.line.runner",
+			value = "enabled",
+			havingValue = "true",
+			matchIfMissing = true
+	)
+
+	@Component
+	public class CommandLineTaskExecutor implements CommandLineRunner{
+
+		@Bean
+		public Clock clock() {
+			return Clock.systemUTC();
+		}
+
+		@Bean
+		public Supplier<UUID> uuidSupplier(){
+			return UUID::randomUUID;
+		}
+
+		@Override
+		public void run(String... args)throws Exception{
+
+		}
+	}
 }

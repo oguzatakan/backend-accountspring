@@ -5,7 +5,9 @@ import com.atakanoguz.accspring.repository.AccountRepository;
 import com.atakanoguz.accspring.service.AccountService;
 import com.atakanoguz.accspring.service.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -49,7 +51,15 @@ class AccountControllerTest {
     @Autowired
     private AccountDtoConverter converter;
 
-    private AccountService service = new AccountService(accountRepository, customerService, converter);
+    private AccountService service = new AccountService(accountRepository, customerService, converter, clock);
     private ObjectMapper mapper = new ObjectMapper();
+
     private static final UUID uuid = UUID.randomUUID();
+
+    @BeforeEach
+    public void setup(){
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);
+    }
+
 }
