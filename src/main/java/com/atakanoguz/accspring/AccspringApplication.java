@@ -34,29 +34,4 @@ public class AccspringApplication implements CommandLineRunner {
 		System.out.println(customer);
 	}
 
-	@ConditionalOnProperty(
-			prefix = "command.line.runner",
-			value = "enabled",
-			havingValue = "true",
-			matchIfMissing = true
-	)
-
-	@Component
-	public class CommandLineTaskExecutor implements CommandLineRunner{
-
-		@Bean
-		public Clock clock() {
-			return Clock.systemUTC();
-		}
-
-		@Bean
-		public Supplier<UUID> uuidSupplier(){
-			return UUID::randomUUID;
-		}
-
-		@Override
-		public void run(String... args)throws Exception{
-
-		}
-	}
 }

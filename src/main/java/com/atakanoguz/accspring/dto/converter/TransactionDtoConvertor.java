@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
 public class TransactionDtoConvertor {
 
     public TransactionDto convert(Transaction from) {
-        return new TransactionDto(from.getId(),
-        from.getTransactionType(),
-        from.getAmount(),
-        from.getTransactionDate());
+        return new TransactionDto(
+                from.getId(),
+                from.getTransactionType(),
+                from.getAmount(),
+                from.getTransactionDate());
     }
 }

@@ -23,18 +23,14 @@ public class AccountService {
     private final CustomerService customerService;
     private final AccountDtoConverter converter;
 
-    private final Clock clock;
-    private final Supplier<UUID> uuidSupplier;
-
 
     public AccountService(AccountRepository accountRepository,
                           CustomerService customerService,
-
-                          AccountDtoConverter converter, Clock clock) {
+                          AccountDtoConverter converter){
         this.accountRepository = accountRepository;
         this.customerService = customerService;
         this.converter = converter;
-        this.clock = clock;
+
     }
 
     public AccountDto createAccount(CreateAccountRequest createAccountRequest) {
@@ -44,7 +40,7 @@ public class AccountService {
         Account account = new Account(
                 customer,
                 createAccountRequest.getInitialCredit(),
-                getLocalDateTimeNow());
+                LocalDateTime.now());
 
         if (createAccountRequest.getInitialCredit().compareTo(BigDecimal.ZERO) > 0) {
             Transaction transaction = new Transaction(createAccountRequest.getInitialCredit(), account);
@@ -54,13 +50,6 @@ public class AccountService {
 
         return converter.convert(accountRepository.save(account));
 
-    }
-
-    private LocalDateTime getLocalDateTimeNow() {
-        Instant instant = clock.instant();
-        return LocalDateTime.ofInstant(
-                instant,
-                Clock.systemDefaultZone().getZone());
     }
 
 }
