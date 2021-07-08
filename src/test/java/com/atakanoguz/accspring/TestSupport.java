@@ -22,6 +22,10 @@ public class TestSupport {
         return Instant.now(clock);
     }
 
+    public LocalDateTime getLocalDateTime() {
+        return LocalDateTime.ofInstant(getCurrentInstant(), Clock.systemDefaultZone().getZone());
+    }
+
     public Customer generateCustomer() {
         return new Customer("customer-id","customer-name","customer-surname",Set.of());
     }

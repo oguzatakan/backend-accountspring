@@ -60,7 +60,7 @@ class AccountServiceTest extends TestSupport {
         Transaction transaction = new Transaction(null, TransactionType.INITIAL, request.getInitialCredit(), getLocalDateTime() ,account);
         account.getTransaction().add(transaction);
 
-        TransactionDto transactionDto = new TransactionDto("",TransactionType.INITIAL,new BigDecimal(100),getLocalDateTime));
+        TransactionDto transactionDto = new TransactionDto("",TransactionType.INITIAL,new BigDecimal(100),getLocalDateTime());
         AccountDto expected = new AccountDto("account-id", new BigDecimal(100), getLocalDateTime(), customerDto, Set.of(transactionDto));
 
         when(customerService.findCustomerById("customer-id")).thenReturn(customer);
@@ -79,7 +79,7 @@ class AccountServiceTest extends TestSupport {
         CreateAccountRequest request = generateCreateAccountRequest(0);
 
         Account account = generateAccount(0);
-        AccountDto expected = new AccountDto("account-id",BigDecimal.ZERO,getLocalDateTime,customerDto,Set.of());
+        AccountDto expected = new AccountDto("account-id",BigDecimal.ZERO, getLocalDateTime(), customerDto, Set.of());
 
         when(customerService.findCustomerById("customer-id")).thenReturn(customer);
         when(accountRepository.save(account)).thenReturn(account);
@@ -88,6 +88,7 @@ class AccountServiceTest extends TestSupport {
         AccountDto result = service.createAccount(request);
         assertEquals(result,expected);
     }
+
 
     @Test
     public void testCreateAccount_whenCustomerIdDoesNotExists_shouldThrowCustomerNotFoundException() {
