@@ -110,7 +110,4 @@ class AccountServiceTest extends TestSupport {
         return new Account("", new BigDecimal(balance), getLocalDateTime(),customer,new HashSet<>());
     }
 
-
-
-
 }
