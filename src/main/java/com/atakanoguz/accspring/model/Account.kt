@@ -27,14 +27,12 @@ data class Account(
 ) {
 
 
-    constructor(customer: Customer, balance: BigDecimal, creationDate: LocalDateTime) : this(
+    constructor(customer: Customer,balance: BigDecimal?,creationDate: LocalDateTime) : this(
             "",
             customer = customer,
             balance = balance,
             creationDate = creationDate
     )
-
-
 
 
     override fun equals(other: Any?): Boolean {

@@ -1,5 +1,6 @@
 package com.atakanoguz.accspring.controller;
 
+import com.atakanoguz.accspring.IntegrationTestSupport;
 import com.atakanoguz.accspring.dto.CreateAccountRequest;
 import com.atakanoguz.accspring.dto.converter.AccountDtoConverter;
 import com.atakanoguz.accspring.model.Customer;
@@ -42,39 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 @RunWith(SpringRunner.class)
 @DirtiesContext
-class AccountControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private Clock clock;
-
-    @MockBean
-    private Supplier<UUID> uuidSupplier;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private CustomerService customerService;
-
-    @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
-    private AccountDtoConverter converter;
-
-    private AccountService service = new AccountService(accountRepository, customerService, converter);
-    private ObjectMapper mapper = new ObjectMapper();
-
-
-    @BeforeEach
-    public void setup(){
-        mapper.registerModule(new JavaTimeModule());
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);
-
-    }
+class AccountControllerTest extends IntegrationTestSupport {
 
     @Test
     public void testCreateAccount_whenCustomerIdExits_shouldCreateAccountAndReturnAccountDto() throws Exception {
@@ -82,7 +51,7 @@ class AccountControllerTest {
         Customer customer = customerRepository.save(new Customer());
         CreateAccountRequest request = new CreateAccountRequest(customer.getId(), new BigDecimal(100));
 
-        this.mockMvc.perform(post("/v1/account")
+        this.mockMvc.perform(post(ACCOUNT_API_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request)))
                 .andExpect(status().is2xxSuccessful())
@@ -93,6 +62,41 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.customer.name", is(customer.getName())))
                 .andExpect(jsonPath("$.customer.surname", is(customer.getSurname())))
                 .andExpect(jsonPath("$.transactions", hasSize(1)));
+
+    }
+
+    @Test
+    public void testCreateAccount_whenCustomerIdDoesNotExit_shouldReturn404NotFound() throws Exception {
+        CreateAccountRequest request = generateCreateAccountRequest("id",100);
+
+        this.mockMvc.perform(post(ACCOUNT_API_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request)))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    public void testCreateAccount_whenRequestHasNoCustomerId_shouldReturn400BadRequest() throws Exception {
+        CreateAccountRequest request = generateCreateAccountRequest("",100);
+
+        this.mockMvc.perform(post(ACCOUNT_API_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+    }
+
+    @Test
+    public void testCreateAccount_whenRequestHasLessThanZeroInitialCreditValue_shouldReturn400BadRequest() throws Exception {
+        CreateAccountRequest request = generateCreateAccountRequest("id",100);
+
+        this.mockMvc.perform(post(ACCOUNT_API_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
     }
 
