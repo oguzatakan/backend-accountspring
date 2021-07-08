@@ -24,13 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-import static org.mockito.Mockito.mock;
-
 class AccountServiceTest extends TestSupport {
 
     private AccountRepository accountRepository;
     private CustomerService customerService;
-    private AccountDtoConverter accountDtoConverter;
+    private AccountDtoConverter converter;
 
     private AccountService service;
 
@@ -44,10 +42,10 @@ class AccountServiceTest extends TestSupport {
 
         accountRepository = mock(AccountRepository.class);
         customerService = mock(CustomerService.class);
-        accountDtoConverter = mock(AccountDtoConverter.class);
+        converter = mock(AccountDtoConverter.class);
         Clock clock = mock(Clock.class);
 
-        service = new AccountService(accountRepository, customerService, accountDtoConverter, clock);
+        service = new AccountService(accountRepository, customerService, converter, clock);
 
         when(clock.instant()).thenReturn(getCurrentInstant());
         when(clock.getZone()).thenReturn(Clock.systemDefaultZone().getZone());
@@ -81,7 +79,7 @@ class AccountServiceTest extends TestSupport {
         CreateAccountRequest request = generateCreateAccountRequest(0);
 
         Account account = generateAccount(0);
-        AccountDto expected = new AccountDto("account-id",BigDecimal.ZERO,getLocalDateTime(),customerDto,Set.of());
+        AccountDto expected = new AccountDto("account-id",BigDecimal.ZERO,getLocalDateTime,customerDto,Set.of());
 
         when(customerService.findCustomerById("customer-id")).thenReturn(customer);
         when(accountRepository.save(account)).thenReturn(account);
@@ -102,7 +100,6 @@ class AccountServiceTest extends TestSupport {
         verify(customerService).findCustomerById(request.getCustomerId());
         verifyNoInteractions(accountRepository);
         verifyNoInteractions(converter);
-
 
     }
 
