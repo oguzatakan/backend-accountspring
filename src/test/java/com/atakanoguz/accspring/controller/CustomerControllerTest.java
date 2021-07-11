@@ -28,12 +28,39 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,properties = {
+        "server-port=8",
+        "command.line.runner.enabled=false"
+})
 
 @RunWith(SpringRunner.class)
 @DirtiesContext
 public class CustomerControllerTest extends IntegrationTestSupport{
+
     @Test
     public void testGetCustomerById_whenCustomerIdExists_shouldReturnCustomerDto() throws Exception{
 
+        Customer customer = customerRepository.save(generateCustomer());
+        accountService.createAccount(generateCreateAccountRequest(customer.getId(),100));
+
+        CustomerDto expected = converter.convertToCustomerDto(
+                                    customerRepository.getById(
+                                            Objects.requireNonNull(customer.getId())));
+
+        this.mockMvc.perform(get(CUSTOMER_API_ENDPOINT + customer.getId()))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(expected),false))
+                .andReturn();
+
+    }
+
+    @Test
+    public void testGetCustomerById_whenCustomerIdDoesNotExist_shouldReturnHttpNotFound() throws Exception {
+        this.mockMvc.perform(get(CUSTOMER_API_ENDPOINT + "non-exists-customer"))
+                .andExpect(status().isNotFound())
+                .andReturn();
     }
 }
