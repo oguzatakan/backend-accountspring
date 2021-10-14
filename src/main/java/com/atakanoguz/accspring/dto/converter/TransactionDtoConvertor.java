@@ -5,7 +5,6 @@ import com.atakanoguz.accspring.model.Transaction;
 import org.springframework.stereotype.Component;
 
 
-
 @Component
 public class TransactionDtoConvertor {
 
