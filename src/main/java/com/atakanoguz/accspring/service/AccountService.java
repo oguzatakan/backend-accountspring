@@ -26,7 +26,7 @@ public class AccountService {
 
     public AccountService(AccountRepository accountRepository,
                           CustomerService customerService,
-                          AccountDtoConverter converter, Clock clock){
+                          AccountDtoConverter converter, Clock clock) {
         this.accountRepository = accountRepository;
         this.customerService = customerService;
         this.converter = converter;
@@ -44,7 +44,7 @@ public class AccountService {
                 getLocalDateTimeNow());
 
         if (createAccountRequest.getInitialCredit().compareTo(BigDecimal.ZERO) > 0) {
-            Transaction transaction = new Transaction(createAccountRequest.getInitialCredit(), getLocalDateTimeNow(),account);
+            Transaction transaction = new Transaction(createAccountRequest.getInitialCredit(), getLocalDateTimeNow(), account);
             account.getTransaction().add(transaction);
 
         }
