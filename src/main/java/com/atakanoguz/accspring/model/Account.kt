@@ -16,18 +16,18 @@ data class Account(
         val balance: BigDecimal? = BigDecimal.ZERO,
         val creationDate: LocalDateTime,
 
-        @ManyToOne(fetch = FetchType.LAZY,cascade = [CascadeType.ALL])
-        @JoinColumn(name = "customer_id",nullable = false)
+        @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+        @JoinColumn(name = "customer_id", nullable = false)
         val customer: Customer?,
 
-        @OneToMany(mappedBy = "account",fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+        @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
         val transaction: Set<Transaction> = HashSet()
 
 
 ) {
 
 
-    constructor(customer: Customer,balance: BigDecimal?,creationDate: LocalDateTime) : this(
+    constructor(customer: Customer, balance: BigDecimal?, creationDate: LocalDateTime) : this(
             "",
             customer = customer,
             balance = balance,

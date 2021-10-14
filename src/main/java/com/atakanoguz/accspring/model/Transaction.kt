@@ -16,11 +16,11 @@ data class Transaction(
         val transactionDate: LocalDateTime?,
 
         @ManyToOne(fetch = FetchType.LAZY, optional = false)
-        @JoinColumn(name = "account_id",nullable = false)
+        @JoinColumn(name = "account_id", nullable = false)
         val account: Account
 
 ) {
-    constructor(amount: BigDecimal, transactionDate: LocalDateTime? ,account: Account) : this(
+    constructor(amount: BigDecimal, transactionDate: LocalDateTime?, account: Account) : this(
             id = null,
             amount = amount,
             transactionDate = transactionDate,
@@ -54,5 +54,5 @@ data class Transaction(
 }
 
 enum class TransactionType {
-    INITIAL,TRANSFER
+    INITIAL, TRANSFER
 }
