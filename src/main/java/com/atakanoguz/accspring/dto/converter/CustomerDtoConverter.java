@@ -19,7 +19,7 @@ public class CustomerDtoConverter {
     }
 
     public AccountCustomerDto convertToAccountCustomer(Optional<Customer> from) {
-        return from.map(f-> new AccountCustomerDto(f.getId(),f.getName(),f.getSurname())).orElse(null);
+        return from.map(f -> new AccountCustomerDto(f.getId(), f.getName(), f.getSurname())).orElse(null);
     }
 
     public CustomerDto convertToCustomerDto(Customer from) {

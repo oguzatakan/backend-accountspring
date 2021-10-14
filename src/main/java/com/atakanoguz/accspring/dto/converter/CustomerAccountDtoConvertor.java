@@ -16,7 +16,7 @@ public class CustomerAccountDtoConvertor {
         this.convertor = convertor;
     }
 
-    public CustomerAccountDto convert(Account from){
+    public CustomerAccountDto convert(Account from) {
         return new CustomerAccountDto(
                 Objects.requireNonNull(from.getId()),
                 from.getBalance(),
