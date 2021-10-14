@@ -29,6 +29,6 @@ public abstract class IntegrationTestSupport extends TestSupport {
     @BeforeEach
     public void setup() {
         mapper.registerModule(new JavaTimeModule());
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 }

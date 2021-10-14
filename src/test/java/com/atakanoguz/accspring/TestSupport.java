@@ -27,11 +27,11 @@ public class TestSupport {
     }
 
     public Customer generateCustomer() {
-        return new Customer("customer-id","customer-name","customer-surname",Set.of());
+        return new Customer("customer-id", "customer-name", "customer-surname", Set.of());
     }
 
     public CreateAccountRequest generateCreateAccountRequest(int initialCredit) {
-        return generateCreateAccountRequest("customer-id",initialCredit);
+        return generateCreateAccountRequest("customer-id", initialCredit);
     }
 
     public CreateAccountRequest generateCreateAccountRequest(String customerId, int initialCredit) {

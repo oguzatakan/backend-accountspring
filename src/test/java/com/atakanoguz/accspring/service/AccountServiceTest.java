@@ -33,7 +33,7 @@ class AccountServiceTest extends TestSupport {
     private AccountService service;
 
     private final Customer customer = generateCustomer();
-    private final AccountCustomerDto customerDto= new AccountCustomerDto("customer-id",
+    private final AccountCustomerDto customerDto = new AccountCustomerDto("customer-id",
             "customer-name",
             "customer-surname");
 
@@ -57,10 +57,10 @@ class AccountServiceTest extends TestSupport {
         CreateAccountRequest request = generateCreateAccountRequest(100);
 
         Account account = generateAccount(100);
-        Transaction transaction = new Transaction(null, TransactionType.INITIAL, request.getInitialCredit(), getLocalDateTime() ,account);
+        Transaction transaction = new Transaction(null, TransactionType.INITIAL, request.getInitialCredit(), getLocalDateTime(), account);
         account.getTransaction().add(transaction);
 
-        TransactionDto transactionDto = new TransactionDto("",TransactionType.INITIAL,new BigDecimal(100),getLocalDateTime());
+        TransactionDto transactionDto = new TransactionDto("", TransactionType.INITIAL, new BigDecimal(100), getLocalDateTime());
         AccountDto expected = new AccountDto("account-id", new BigDecimal(100), getLocalDateTime(), customerDto, Set.of(transactionDto));
 
         when(customerService.findCustomerById("customer-id")).thenReturn(customer);
@@ -70,7 +70,7 @@ class AccountServiceTest extends TestSupport {
 
         AccountDto result = service.createAccount(request);
 
-        assertEquals(result,expected);
+        assertEquals(result, expected);
 
     }
 
@@ -79,14 +79,14 @@ class AccountServiceTest extends TestSupport {
         CreateAccountRequest request = generateCreateAccountRequest(0);
 
         Account account = generateAccount(0);
-        AccountDto expected = new AccountDto("account-id",BigDecimal.ZERO, getLocalDateTime(), customerDto, Set.of());
+        AccountDto expected = new AccountDto("account-id", BigDecimal.ZERO, getLocalDateTime(), customerDto, Set.of());
 
         when(customerService.findCustomerById("customer-id")).thenReturn(customer);
         when(accountRepository.save(account)).thenReturn(account);
         when(converter.convert(account)).thenReturn(expected);
 
         AccountDto result = service.createAccount(request);
-        assertEquals(result,expected);
+        assertEquals(result, expected);
     }
 
 
@@ -96,7 +96,7 @@ class AccountServiceTest extends TestSupport {
 
         when(customerService.findCustomerById("customer-id")).thenThrow(new CustomerNotFoundException("test-exception"));
 
-        assertThrows(CustomerNotFoundException.class, ()-> service.createAccount(request));
+        assertThrows(CustomerNotFoundException.class, () -> service.createAccount(request));
 
         verify(customerService).findCustomerById(request.getCustomerId());
         verifyNoInteractions(accountRepository);
@@ -105,7 +105,7 @@ class AccountServiceTest extends TestSupport {
     }
 
     private Account generateAccount(int balance) {
-        return new Account("", new BigDecimal(balance), getLocalDateTime(),customer,new HashSet<>());
+        return new Account("", new BigDecimal(balance), getLocalDateTime(), customer, new HashSet<>());
     }
 
 }

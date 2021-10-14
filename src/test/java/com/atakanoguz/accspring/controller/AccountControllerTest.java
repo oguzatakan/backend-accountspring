@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,properties = {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
 
         "server-port=0",
         "command.line.runner.enabled=false"
@@ -67,7 +67,7 @@ class AccountControllerTest extends IntegrationTestSupport {
 
     @Test
     public void testCreateAccount_whenCustomerIdDoesNotExit_shouldReturn404NotFound() throws Exception {
-        CreateAccountRequest request = generateCreateAccountRequest("id",100);
+        CreateAccountRequest request = generateCreateAccountRequest("id", 100);
 
         this.mockMvc.perform(post(ACCOUNT_API_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -78,7 +78,7 @@ class AccountControllerTest extends IntegrationTestSupport {
 
     @Test
     public void testCreateAccount_whenRequestHasNoCustomerId_shouldReturn400BadRequest() throws Exception {
-        CreateAccountRequest request = generateCreateAccountRequest("",100);
+        CreateAccountRequest request = generateCreateAccountRequest("", 100);
 
         this.mockMvc.perform(post(ACCOUNT_API_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -90,7 +90,7 @@ class AccountControllerTest extends IntegrationTestSupport {
 
     @Test
     public void testCreateAccount_whenRequestHasLessThanZeroInitialCreditValue_shouldReturn400BadRequest() throws Exception {
-        CreateAccountRequest request = generateCreateAccountRequest("id",100);
+        CreateAccountRequest request = generateCreateAccountRequest("id", 100);
 
         this.mockMvc.perform(post(ACCOUNT_API_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
